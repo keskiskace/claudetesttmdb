@@ -1,0 +1,20 @@
+node_modules
+npm-debug.log
+Dockerfile
+docker-compose.yml
+.git
+.gitignore
+README.md
+reddit_post.md
+*.env
+.env
+vercel.json
+serverless.js
+configure.html
+# Ignore local environment and editor files
+.vscode
+*.swp
+*.log
+
+# Keep public assets and source code; don't exclude src/ or public/
+# .well-known is kept (not ignored) for any verification needs
