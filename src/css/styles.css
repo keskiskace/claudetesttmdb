@@ -12,9 +12,9 @@
     --overlay-bg: rgba(14,16,24,0.78);
 
     /* Borders / Lines */
-    --border: #2d3140;
-    --border-alt: #373c4e;
-    --border-focus: #9e7dff;
+    --border: #2d3940;
+    --border-alt: #37464e;
+    --border-focus: #7de5ff;
 
     /* Typography */
     --text: #ffffff;
@@ -24,9 +24,9 @@
     --mono-stack: ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 
     /* Accent / Semantic */
-    --accent: #8f61ff;
-    --accent-accent2: #c58cff;
-    --accent-hover: #a77dff;
+    --accent: #61c0ff;
+    --accent-accent2: #8ccbff;
+    --accent-hover: #183844;
     --accent-fade: rgba(143,97,255,0.18);
     --success: #3fbf9b;
     --success-hover: #30a884;
@@ -41,14 +41,14 @@
     --radius-lg: 16px;
     --shadow-sm: 0 2px 4px -1px rgba(0,0,0,0.5);
     --shadow-md: 0 6px 18px -6px rgba(0,0,0,0.55),0 2px 8px -2px rgba(0,0,0,0.35);
-    --shadow-focus: 0 0 0 3px rgba(143,97,255,0.35);
+    --shadow-focus: 0 0 0 3px rgba(97, 231, 255, 0.35);
 
     --transition: .18s cubic-bezier(.4,0,.2,1);
 
     /* Scrollbars */
     --scroll-track: #181a24;
     --scroll-thumb: #32384a;
-    --scroll-thumb-hover: #40485d;
+    --scroll-thumb-hover: #40555d;
 }
 
 /* Global Reset */
@@ -97,7 +97,7 @@ body {
 .site-header {
     padding: 2.6rem 1.4rem 2.2rem;
     background:
-        linear-gradient(115deg,#30245b 0%,#4c3594 35%,#6d49d4 65%,#8f61ff 100%);
+        linear-gradient(115deg,#61dfff 0%,#32708d 30%,#32708d 70%,#61dfff 100%);
     position: relative;
     overflow: hidden;
     box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
