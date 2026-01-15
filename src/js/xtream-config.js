@@ -18,6 +18,7 @@
     const debugChk = document.getElementById('debugMode');
     const customEpgGroup = document.getElementById('customEpgGroup');
     const customEpgUrlInp = document.getElementById('customEpgUrl');
+    const tmdbKeyInput = document.getElementById('tmdbKey');
 
     const epgModeRadios = () => [...document.querySelectorAll('input[name="epgMode"]')];
 
@@ -170,6 +171,7 @@
         const customEpg = (epgMode === 'custom') ? customEpgUrlInp.value.trim() : '';
         const epgOffset = epgOffsetInput.value ? parseFloat(epgOffsetInput.value) : 0;
         const debug = !!(debugChk && debugChk.checked);
+        const tmdbKey = tmdbKeyInput ? tmdbKeyInput.value.trim() : '';
         
         // --- MODIFICATION ICI : On ajoute les SÉRIES ---
         const movieCats = [...document.querySelectorAll('.home-category-select.movie')]
@@ -222,7 +224,7 @@
         try {
             let liveCount = 0;
             let vodCount = 0;
-            let seriesCount = 0; // Ajouté
+            let seriesCount = 0; 
             let categories = new Set();
             let epgStats = { programmes: 0, channels: 0 };
 
@@ -328,6 +330,7 @@
                 xtreamUrl: baseUrl,
                 xtreamUsername: username,
                 xtreamPassword: password,
+                tmdbKey: tmdbKey || undefined,
                 enableEpg: enableEpgFinal,
                 debug: debug || undefined,
                 home_movies_list: movieCats.length > 0 ? movieCats : undefined,
@@ -345,7 +348,7 @@
             config.prescan = {
                 liveCount,
                 vodCount,
-                seriesCount, // Ajouté ici
+                seriesCount, 
                 categoryCount: categories.size,
                 epgProgrammes: enableEpgFinal ? epgStats.programmes : 0,
                 epgChannels: enableEpgFinal ? epgStats.channels : 0,

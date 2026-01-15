@@ -135,6 +135,8 @@ async function fetchData(addonInstance) {
                 url: `${xtreamUrl}/movie/${xtreamUsername}/${xtreamPassword}/${s.stream_id}.${s.container_extension}`,
                 poster: s.stream_icon,
                 plot: s.plot,
+                imdb_id: s.imdb_id,
+                tmdb_id: s.tmdb_id,
                 year: s.releasedate ? new Date(s.releasedate).getFullYear() : null,
                 category: cat,
                 attributes: {
@@ -175,6 +177,8 @@ async function fetchData(addonInstance) {
                                 type: 'series',
                                 poster: s.cover,
                                 plot: s.plot,
+                                imdb_id: s.imdb_id,
+                                tmdb_id: s.tmdb_id,
                                 category: cat,
                                 attributes: {
                                     'tvg-logo': s.cover,
