@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Xtream API Configuration • IPTV Addon</title>
+    <title>Xtream API Configuration</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="dark light">
     <link rel="stylesheet" href="/css/styles.css">
@@ -10,23 +10,20 @@
 <body class="page-config">
 <header class="site-header">
     <div class="inner">
-        <h1 class="app-title">Xtream Codes API</h1>
-        <p class="subtitle">Connect using panel credentials and an optional custom EPG.</p>
-        <nav class="top-nav">
-            <a href="/" class="nav-link">Home</a>
-            <a href="/html/direct-config.html" class="nav-link">Direct Mode</a>
-        </nav>
+        <center>
+        <h1 class="app-title">Xtream API Configuration</h1>
+        <p class="subtitle"></p>
+        </center>
     </div>
 </header>
 
 <main class="main-content narrow">
     <form id="xtreamForm" class="config-form" autocomplete="off">
         <fieldset>
-            <legend>Credentials</legend>
             <div class="form-group">
-                <label for="addonName">Nom de l'Addon (affichage Stremio)</label>
-                <input type="text" id="addonName" name="addonName" placeholder="Ex: Mon IPTV Perso">
-                <small class="hint">Laissez vide pour le nom par défaut.</small>
+                <label for="addonName">Addon name (in stremio)</label>
+                <input type="text" id="addonName" name="addonName" placeholder="Ex: My IPTV">
+                <small class="hint">empty for default name</small>
             </div>
             <div class="form-group">
                 <label for="xtreamUrl">Xtream Base URL <span class="req">*</span></label>
@@ -47,45 +44,45 @@
         </fieldset>
 
 <fieldset id="homeCategoriesFieldset">
-    <legend>Personnalisation Accueil (Rails Stremio)</legend>
-    <p class="hint">Chargez vos catégories pour créer vos propres rails personnalisés sur l'accueil de Stremio.</p>
+    <legend>Home Screen Customization (Stremio Rails)</legend>
+    <p class="hint">Load your categories to create your own custom rails on the Stremio home screen.</p>
     
-    <button type="button" id="btnLoadCats" class="btn secondary small" style="margin-bottom: 15px;">🔍 1. Charger mes catégories</button>
+    <button type="button" id="btnLoadCats" class="btn secondary small" style="margin-bottom: 15px;">🔍 Step 1. Import Categories</button>
 
     <div id="catSelectors" class="hidden">
         <div style="margin-bottom: 20px;">
-            <label>🎬 Rails Films personnalisés</label>
+            <label>🎬 Custom Movie Rails</label>
             <div id="movieContainer"></div>
-            <button type="button" class="btn tiny ghost" onclick="addSelector('movie')">+ Ajouter un rail de films</button>
+            <button type="button" class="btn tiny ghost" onclick="addSelector('movie')">+ add Movie Rails</button>
         </div>
 
         <div style="margin-bottom: 20px;">
-            <label>🍿 Rails Séries personnalisés</label>
+            <label>🍿 Custom Séries Rails</label>
             <div id="seriesContainer"></div>
-            <button type="button" class="btn tiny ghost" onclick="addSelector('series')">+ Ajouter un rail de séries</button>
+            <button type="button" class="btn tiny ghost" onclick="addSelector('series')">+ add Series Rails</button>
         </div>
 
         <div style="margin-bottom: 20px;">
-            <label>📺 Rails Chaînes personnalisés</label>
+            <label>📺 Custom Channel Rails</label>
             <div id="tvContainer"></div>
-            <button type="button" class="btn tiny ghost" onclick="addSelector('tv')">+ Ajouter un rail de chaînes</button>
+            <button type="button" class="btn tiny ghost" onclick="addSelector('tv')">+ add Channel Rails</button>
         </div>
     </div>
 
     <div id="blacklistSection" class="hidden" style="margin-top: 20px; border-top: 1px solid #444; padding-top: 15px;">
-        <label>🚫 Masquer des catégories (Découvrir)</label>
-        <p class="hint">Cochez les catégories à masquer. Utilisez les filtres pour trier par type.</p>
+        <label>🚫 Hide Categories</label>
+        <p class="hint">Select categories to hide.</p>
     
         <div style="margin-bottom: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
-            <button type="button" class="btn tiny ghost active-filter" id="btnFilterAll" onclick="filterBlacklist('all')" style="border-bottom: 2px solid #BD5FFF;">Tout</button>
+            <button type="button" class="btn tiny ghost active-filter" id="btnFilterAll" onclick="filterBlacklist('all')" style="border-bottom: 2px solid #BD5FFF;">All</button>
             <button type="button" class="btn tiny ghost" id="btnFilterLive" onclick="filterBlacklist('live')">Live</button>
             <button type="button" class="btn tiny ghost" id="btnFilterMovie" onclick="filterBlacklist('movie')">VOD</button>
             <button type="button" class="btn tiny ghost" id="btnFilterSeries" onclick="filterBlacklist('series')">Séries</button>
         </div>
 
         <div style="margin-bottom: 10px;">
-            <button type="button" class="btn tiny ghost" onclick="toggleVisibleBlacklist(true)">Tout cocher visible</button>
-            <button type="button" class="btn tiny ghost" onclick="toggleVisibleBlacklist(false)">Tout décocher visible</button>
+            <button type="button" class="btn tiny ghost" onclick="toggleVisibleBlacklist(true)"> Check All</button>
+            <button type="button" class="btn tiny ghost" onclick="toggleVisibleBlacklist(false)">Uncheck All</button>
         </div>
 
         <div id="blacklistContainer" style="max-height: 250px; overflow-y: auto; background: #1a1a1a; padding: 10px; border-radius: 5px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
@@ -132,28 +129,17 @@
         </fieldset>
 
         <div class="form-actions">
-            <button type="submit" class="btn primary wide">Install / Update (Xtream)</button>
-            <a href="/html/direct-config.html" class="btn subtle">Switch to Direct</a>
-        </div>
-        <div class="donate-inline under-form">
-            <p class="hint" style="margin:.4rem 0 .6rem;">Enjoying the addon? Support development:</p>
-            <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="K3QSoR2" data-color="#BD5FFF" data-emoji="☕" data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FFDD00"></script>
+            <button type="submit" class="btn primary wide">Step 2. Install / Update</button>
+            <a href="/" class="btn subtle">↩️ Home</a>
+                    <nav class="top-nav">
+        </nav>
         </div>
     </form>
-
-    <section class="info-panel">
-        <h3>Hints</h3>
-        <ul class="feature-list">
-            <li>JSON mode fetches live, VOD and (optional) panel EPG.</li>
-            <li>M3U mode parses the entire exported playlist client-side.</li>
-            <li>Series (shows) are supported in both modes.</li>
-        </ul>
-    </section>
 </main>
 
 <footer class="site-footer">
     <div class="inner">
-        <p>&copy; 2025 M3U/EPG Addon • Made with ❤️ by Inside4ndroid</p>
+        <p>&copy; 2026 M3U/Xtream Addon</p>
     </div>
 </footer>
 
@@ -184,7 +170,7 @@ function addSelector(type, defaultValue = "") {
     const select = document.createElement('select');
     select.className = "home-category-select " + type;
     select.style = "flex-grow: 1;";
-    select.innerHTML = `<option value="">-- Choisir une catégorie --</option>`;
+    select.innerHTML = `<option value="">-- Select a category --</option>`;
     
     let list = (type === 'movie') ? categoryData.movies : (type === 'series' ? categoryData.series : categoryData.lives);
     list.forEach(name => {
@@ -227,8 +213,8 @@ document.getElementById('btnLoadCats').addEventListener('click', async () => {
         renderBlacklist();
 
         document.getElementById('catSelectors').classList.remove('hidden');
-        status.innerText = `✅ Chargées (VOD: ${categoryData.movies.length}, Séries: ${categoryData.series.length}, Live: ${categoryData.lives.length})`;
-    } catch (e) { status.innerText = "❌ Erreur"; }
+        status.innerText = `✅ Loaded (VOD: ${categoryData.movies.length}, Séries: ${categoryData.series.length}, Live: ${categoryData.lives.length})`;
+    } catch (e) { status.innerText = "❌ Error"; }
 });
 
 function renderBlacklist() {
