@@ -154,14 +154,6 @@ class M3UEPGAddon {
         let meta = this.generateMetaPreview(item);
         const tmdbKey = this.config.tmdbKey ? this.config.tmdbKey.trim() : null;
 
-        if (item.tmdb_id && type !== 'tv') {
-            meta.id = `tmdb:${item.tmdb_id}`;
-            console.log(`📌 [META] Film "${item.name}" réassigné à TMDB:${item.tmdb_id}`);
-        } else if (item.imdb_id && type !== 'tv') {
-            meta.id = item.imdb_id;
-            console.log(`📌 [META] Film "${item.name}" réassigné à IMDB:${item.imdb_id}`);
-        }
-
         // Enrichissement TMDB pour Films et Séries
         if ((item.tmdb_id || item.imdb_id) && tmdbKey && type !== 'tv') {
             try {
@@ -340,140 +332,45 @@ async function createAddon(config) {
     });
 
 builder.defineStreamHandler(async ({ type, id }) => {
-    console.log(`\n🔍 [STREAM] Recherche pour "${id}" (${type})`);
-    
-    let matchedItems = []; // ✅ Array au lieu d'un seul item
+    let item = null;
 
-    // 1. SI L'ID EST IMDB (ex: tt123456) → CONVERTIR EN TMDB
+    // 1. SI L'ID EST IMDB (ex: tt123456)
     if (id.startsWith('tt')) {
-        console.log(`   → ID IMDB détecté, conversion en TMDB...`);
-        
-        const tmdbKey = config.tmdbKey || addonInstance.config.tmdbKey;
-        if (!tmdbKey) {
-            console.log(`   ❌ Clé TMDB manquante, impossible de convertir`);
-            return { streams: [] };
-        }
-
-        try {
-            // Conversion IMDB → TMDB via API
-            const tmdbType = type === 'series' ? 'tv' : 'movie';
-            const url = `https://api.themoviedb.org/3/find/${id}?api_key=${tmdbKey}&external_source=imdb_id`;
-            console.log(`   → Appel TMDB API...`);
-            
-            const response = await fetch(url);
-            if (!response.ok) {
-                console.log(`   ❌ Erreur API TMDB: ${response.status}`);
-                return { streams: [] };
-            }
-
-            const data = await response.json();
-            const results = data.movie_results || data.tv_results || [];
-            
-            if (results.length === 0) {
-                console.log(`   ❌ Aucun résultat TMDB pour ${id}`);
-                return { streams: [] };
-            }
-
-            const tmdbId = results[0].id.toString();
-            console.log(`   ✅ Conversion réussie: ${id} → TMDB:${tmdbId} (${results[0].title || results[0].name})`);
-
-            // ✅ FILTER pour tous les matches
-            matchedItems = [...addonInstance.movies, ...addonInstance.series].filter(i => {
-                return i.tmdb_id && i.tmdb_id.toString() === tmdbId;
-            });
-
-            console.log(`   ✅ ${matchedItems.length} stream(s) brut(s) trouvé(s)`);
-
-        } catch (error) {
-            console.log(`   ❌ Erreur conversion IMDB→TMDB: ${error.message}`);
-            return { streams: [] };
-        }
+        const cleanId = id.replace(/\D/g, ''); // On ne garde que les chiffres
+        item = [...addonInstance.movies, ...addonInstance.series].find(i => {
+            const providerImdb = i.imdb_id ? i.imdb_id.toString().replace(/\D/g, '') : null;
+            return providerImdb === cleanId;
+        });
     } 
     
     // 2. SI L'ID EST TMDB (ex: tmdb:98765)
     else if (id.startsWith('tmdb:')) {
         const tmdbId = id.split(':')[1];
-        console.log(`   → ID TMDB détecté: ${tmdbId}`);
-        
-        // ✅ FILTER pour tous les matches
-        matchedItems = [...addonInstance.movies, ...addonInstance.series].filter(i => {
-            return i.tmdb_id && i.tmdb_id.toString() === tmdbId;
+        item = [...addonInstance.movies, ...addonInstance.series].find(i => {
+            return i.tmdb_id && i.tmdb_id.toString() === tmdbId.toString();
         });
-        
-        console.log(`   ✅ ${matchedItems.length} stream(s) brut(s) trouvé(s)`);
     }
 
     // 3. SI C'EST TON ID INTERNE (clic depuis ton catalogue)
     else {
-        console.log(`   → ID interne détecté`);
         const stream = addonInstance.getStream(id);
-        if (stream) {
-            console.log(`   ✅ Stream trouvé`);
-            return { streams: [stream] };
-        }
+        if (stream) return { streams: [stream] };
     }
 
-    // ✅ FILTRER LA BLACKLIST AVANT DE RETOURNER
-    if (matchedItems.length > 0) {
-        const blacklist = config.blacklisted_cats || [];
-        
-        // Filtrer les items blacklistés
-        const filteredItems = matchedItems.filter(item => {
-            const category = item.category || item.attributes?.['group-title'] || '';
-            const isBlacklisted = blacklist.includes(category);
-            
-            if (isBlacklisted) {
-                console.log(`   🚫 Filtré (blacklist): "${item.name}" [${category}]`);
-            }
-            
-            return !isBlacklisted;
-        });
-        
-        console.log(`   📊 Après blacklist: ${filteredItems.length}/${matchedItems.length} stream(s)`);
-        
-        if (filteredItems.length === 0) {
-            console.log(`❌ [STREAM] Tous les streams sont blacklistés\n`);
-            return { streams: [] };
-        }
-        
-        const streams = filteredItems.map((item, index) => {
-            // Créer un titre descriptif pour différencier les streams
-            let title = `📺 ${config.addonName || 'IPTV'}`;
-            
-            // Ajouter des infos pour différencier les sources
-            if (filteredItems.length > 1) {
-                // Extraire la qualité du nom si présente
-                const qualityMatch = item.name.match(/(4K|UHD|HD|FHD|SD|HEVC|BluRay|WEB-DL)/i);
-                const quality = qualityMatch ? qualityMatch[1] : '';
-                
-                // Extraire la langue/catégorie si présente
-                const langMatch = item.name.match(/^\|([A-Z]{2})\|/);
-                const lang = langMatch ? langMatch[1] : '';
-                
-                title += ` ${index + 1}`;
-                if (quality) title += ` [${quality}]`;
-                if (lang) title += ` [${lang}]`;
-            }
-            
-            title += ` - ${item.name}`;
-            
-            return {
+    // SI UN MATCH EST TROUVÉ
+    if (item) {
+        return {
+            streams: [{
                 url: item.url,
-                title: title,
+                title: `📺 Lien IPTV : ${item.name}`,
                 behaviorHints: { 
                     notWebReady: true,
                     proxyHeaders: { "User-Agent": "Mozilla/5.0" }
                 }
-            };
-        });
-
-        console.log(`✅ [STREAM] Retour de ${streams.length} stream(s)\n`);
-        streams.forEach((s, i) => console.log(`   ${i+1}. ${s.title}`));
-        
-        return { streams };
+            }]
+        };
     }
 
-    console.log(`❌ [STREAM] Aucun stream trouvé pour "${id}"\n`);
     return { streams: [] };
 });
     builder.defineMetaHandler(async ({ type, id }) => ({ meta: await addonInstance.getDetailedMetaAsync(id, type) }));

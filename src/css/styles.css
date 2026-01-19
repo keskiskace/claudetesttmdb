@@ -108,8 +108,8 @@ body {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(at 15% 85%, rgba(197,140,255,0.18), transparent 70%),
-        radial-gradient(at 85% 20%, rgba(143,97,255,0.25), transparent 65%);
+        radial-gradient(at 15% 85%, rgba(140, 209, 255, 0.18), transparent 70%),
+        radial-gradient(at 85% 20%, rgba(97, 192, 255, 0.25), transparent 65%);
     mix-blend-mode: overlay;
     pointer-events: none;
 }
@@ -563,8 +563,8 @@ select:focus {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(at 80% 18%,rgba(143,97,255,0.28),transparent 70%),
-        radial-gradient(at 15% 85%,rgba(197,140,255,0.20),transparent 65%);
+        radial-gradient(at 80% 18%,rgba(97, 197, 255, 0.28),transparent 70%),
+        radial-gradient(at 15% 85%,rgba(140, 190, 255, 0.2),transparent 65%);
     opacity: .75;
     pointer-events: none;
     mix-blend-mode: overlay;
